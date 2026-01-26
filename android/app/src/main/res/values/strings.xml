@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">vidyon-driver</string>
+    <string name="title_activity_main">vidyon-driver</string>
+    <string name="package_name">com.vidyon.driver</string>
+    <string name="custom_url_scheme">com.vidyon.driver</string>
+</resources>
