@@ -121,20 +121,22 @@ const App: React.FC = () => {
   const showNav = currentView !== View.SPLASH && currentView !== View.LOGIN;
 
   return (
-    <div className="min-h-screen bg-background-light dark:bg-background-dark text-[#1c160d] dark:text-[#fcfaf8] flex flex-col lg:flex-row overflow-hidden">
+    <div className="h-[100dvh] bg-background-light dark:bg-background-dark text-[#1c160d] dark:text-[#fcfaf8] flex flex-col lg:flex-row overflow-hidden">
       {showNav && (
-        <div className="hidden lg:block">
+        <div className="hidden lg:block shrink-0">
           <Navigation currentView={currentView} setView={setCurrentView} isSidebar={true} />
         </div>
       )}
-      <div className="flex-1 relative flex flex-col h-screen overflow-hidden">
-        <div className="bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 text-[10px] font-black uppercase tracking-[0.2em] py-1 px-4 flex items-center justify-center gap-2 border-b border-amber-200/50 dark:border-amber-800/30">
+      <div className="flex-1 relative flex flex-col h-full overflow-hidden">
+        <div className="bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] py-1 px-4 flex items-center justify-center gap-2 border-b border-amber-200/50 dark:border-amber-800/30 shrink-0">
           <span className="material-symbols-outlined text-xs">science</span>
           Mock Data Mode Enabled
         </div>
-        {renderView()}
+        <div className="flex-1 overflow-hidden">
+          {renderView()}
+        </div>
         {showNav && (
-          <div className="lg:hidden">
+          <div className="lg:hidden shrink-0">
             <Navigation currentView={currentView} setView={setCurrentView} />
           </div>
         )}
