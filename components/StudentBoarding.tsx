@@ -5,11 +5,14 @@ import { View, Student } from '../types';
 interface StudentBoardingProps {
   students: Student[];
   onToggleBoarding: (id: string) => void;
+  onDrop: (id: string) => void;
+  busNumber: string;
   setView: (view: View) => void;
 }
 
-const StudentBoarding: React.FC<StudentBoardingProps> = ({ students, onToggleBoarding, setView }) => {
+const StudentBoarding: React.FC<StudentBoardingProps> = ({ students, onToggleBoarding, onDrop, busNumber, setView }) => {
   const [search, setSearch] = useState('');
+  const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
 
   const filteredStudents = students.filter(s =>
     s.name.toLowerCase().includes(search.toLowerCase())
@@ -99,21 +102,64 @@ const StudentBoarding: React.FC<StudentBoardingProps> = ({ students, onToggleBoa
                       )}
                     </div>
                   </div>
+
+                  <div className="relative">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveMenuId(activeMenuId === student.id ? null : student.id);
+                      }}
+                      className="w-8 h-8 md:w-10 md:h-10 rounded-full hover:bg-black/5 flex items-center justify-center transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-black/40 dark:text-white/40">more_vert</span>
+                    </button>
+
+                    {activeMenuId === student.id && (
+                      <div className="absolute right-0 top-full mt-2 w-48 md:w-56 bg-white dark:bg-[#2c241b] rounded-xl shadow-xl border border-black/5 z-10 overflow-hidden animate-in fade-in zoom-in-95 duration-200 p-1">
+                        <div className="p-3 md:p-4 bg-primary/10 rounded-lg">
+                          <p className="text-[10px] uppercase font-bold text-primary tracking-widest mb-1">Parent Contact</p>
+                          <div className="flex items-center gap-2">
+                            <span className="material-symbols-outlined text-primary text-sm">call</span>
+                            <span className="font-bold text-sm md:text-base text-[#1c160d] dark:text-[#fcfaf8]">{student.parentPhone}</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
-              <button
-                onClick={() => onToggleBoarding(student.id)}
-                className={`w-full h-12 md:h-16 rounded-xl md:rounded-2xl font-extrabold text-sm md:text-base flex items-center justify-center gap-2 md:gap-3 transition-all active:scale-[0.98] ${student.boarded
-                  ? 'bg-success/10 text-success border-2 border-success/20 hover:bg-success/20'
-                  : 'bg-primary text-[#1c160d] shadow-lg shadow-primary/20 hover:bg-primary/90'
-                  }`}
-              >
-                <span className="material-symbols-outlined text-xl md:text-2xl material-symbols-fill">
-                  {student.boarded ? 'check_circle' : 'login'}
-                </span>
-                {student.boarded ? 'Boarded' : 'Confirm'}
-              </button>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => !student.boarded && onToggleBoarding(student.id)}
+                  disabled={student.boarded}
+                  className={`flex-1 h-12 md:h-14 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98] ${student.boarded
+                    ? 'bg-success/10 text-success border border-success/20 cursor-default'
+                    : 'bg-primary text-[#1c160d] shadow-lg shadow-primary/20 hover:bg-primary/90'
+                    }`}
+                >
+                  <span className="material-symbols-outlined text-lg material-symbols-fill">
+                    {student.boarded ? 'check_circle' : 'login'}
+                  </span>
+                  {student.boarded ? 'Boarded' : 'Confirm'}
+                </button>
+
+                <button
+                  onClick={() => onDrop(student.id)}
+                  disabled={!student.boarded || student.dropped}
+                  className={`flex-1 h-12 md:h-14 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98] ${student.dropped
+                    ? 'bg-red-50 text-red-400 border border-red-100 cursor-default'
+                    : student.boarded
+                      ? 'bg-white border-2 border-red-500 text-red-500 hover:bg-red-50'
+                      : 'bg-gray-100 text-gray-300 border border-transparent cursor-not-allowed'
+                    }`}
+                >
+                  <span className="material-symbols-outlined text-lg material-symbols-fill">
+                    {student.dropped ? 'no_crash' : 'logout'}
+                  </span>
+                  {student.dropped ? 'Dropped' : 'Drop'}
+                </button>
+              </div>
             </div>
           ))}
         </div>

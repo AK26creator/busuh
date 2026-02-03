@@ -12,8 +12,12 @@ export interface Student {
   id: string;
   name: string;
   grade: string;
+  rollNumber: string;
   boarded: boolean;
   boardedTime?: string;
+  dropped?: boolean;
+  droppedTime?: string;
+  parentPhone?: string;
   avatar: string;
 }
 

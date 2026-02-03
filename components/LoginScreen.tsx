@@ -9,13 +9,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
     <div className="flex flex-col min-h-[100dvh] lg:flex-row bg-background-light dark:bg-background-dark overflow-hidden">
       {/* Visual Side Panel for Desktop */}
       <div className="hidden lg:flex flex-1 relative bg-primary items-center justify-center p-12 xl:p-20 shrink-0 shadow-2xl z-10">
-        <div className="absolute inset-0 overflow-hidden">
-          <img
-            src="https://picsum.photos/seed/schoolbus/1200/1200"
-            alt="School Bus"
-            className="w-full h-full object-cover mix-blend-overlay opacity-30"
-          />
-        </div>
+
         <div className="relative z-10 text-[#1c160d] text-center max-w-xl">
           <span className="material-symbols-outlined text-[60px] xl:text-[90px] material-symbols-fill mb-6 xl:mb-8">directions_bus</span>
           <h1 className="text-3xl xl:text-5xl font-extrabold mb-4 xl:mb-8 leading-tight tracking-tight">The smarter way to drive students.</h1>

@@ -10,16 +10,16 @@ import Profile from './components/Profile';
 import Navigation from './components/Navigation';
 
 const MOCK_STUDENTS: Student[] = [
-  { id: '1', name: 'Rahul Sharma', grade: 'Grade 4-B', boarded: false, avatar: 'https://i.pravatar.cc/150?u=1' },
-  { id: '2', name: 'Priya Patel', grade: 'Grade 3-A', boarded: true, boardedTime: '7:45 AM', avatar: 'https://i.pravatar.cc/150?u=2' },
-  { id: '3', name: 'Arjun Singh', grade: 'Grade 5-C', boarded: false, avatar: 'https://i.pravatar.cc/150?u=3' },
-  { id: '4', name: 'Anjali Rao', grade: 'Grade 2-B', boarded: false, avatar: 'https://i.pravatar.cc/150?u=4' },
-  { id: '5', name: 'Siddharth Varma', grade: 'Grade 1-A', boarded: false, avatar: 'https://i.pravatar.cc/150?u=5' },
-  { id: '6', name: 'Kavita Iyer', grade: 'Grade 4-A', boarded: false, avatar: 'https://i.pravatar.cc/150?u=6' },
-  { id: '7', name: 'Vikram Seth', grade: 'Grade 5-B', boarded: false, avatar: 'https://i.pravatar.cc/150?u=7' },
-  { id: '8', name: 'Meera Das', grade: 'Grade 3-B', boarded: false, avatar: 'https://i.pravatar.cc/150?u=8' },
-  { id: '9', name: 'Suresh Kumar', grade: 'Grade 6-A', boarded: false, avatar: 'https://i.pravatar.cc/150?u=9' },
-  { id: '10', name: 'Lata Mangesh', grade: 'Grade 2-A', boarded: false, avatar: 'https://i.pravatar.cc/150?u=10' },
+  { id: '1', name: 'Rahul Sharma', grade: 'Grade 4-B', rollNumber: 'R-101', boarded: false, parentPhone: '+91 98765 43210', avatar: 'https://i.pravatar.cc/150?u=1' },
+  { id: '2', name: 'Priya Patel', grade: 'Grade 3-A', rollNumber: 'R-102', boarded: true, boardedTime: '7:45 AM', parentPhone: '+91 98765 43211', avatar: 'https://i.pravatar.cc/150?u=2' },
+  { id: '3', name: 'Arjun Singh', grade: 'Grade 5-C', rollNumber: 'R-103', boarded: false, parentPhone: '+91 98765 43212', avatar: 'https://i.pravatar.cc/150?u=3' },
+  { id: '4', name: 'Anjali Rao', grade: 'Grade 2-B', rollNumber: 'R-104', boarded: false, parentPhone: '+91 98765 43213', avatar: 'https://i.pravatar.cc/150?u=4' },
+  { id: '5', name: 'Siddharth Varma', grade: 'Grade 1-A', rollNumber: 'R-105', boarded: false, parentPhone: '+91 98765 43214', avatar: 'https://i.pravatar.cc/150?u=5' },
+  { id: '6', name: 'Kavita Iyer', grade: 'Grade 4-A', rollNumber: 'R-106', boarded: false, parentPhone: '+91 98765 43215', avatar: 'https://i.pravatar.cc/150?u=6' },
+  { id: '7', name: 'Vikram Seth', grade: 'Grade 5-B', rollNumber: 'R-107', boarded: false, parentPhone: '+91 98765 43216', avatar: 'https://i.pravatar.cc/150?u=7' },
+  { id: '8', name: 'Meera Das', grade: 'Grade 3-B', rollNumber: 'R-108', boarded: false, parentPhone: '+91 98765 43217', avatar: 'https://i.pravatar.cc/150?u=8' },
+  { id: '9', name: 'Suresh Kumar', grade: 'Grade 6-A', rollNumber: 'R-109', boarded: false, parentPhone: '+91 98765 43218', avatar: 'https://i.pravatar.cc/150?u=9' },
+  { id: '10', name: 'Lata Mangesh', grade: 'Grade 2-A', rollNumber: 'R-110', boarded: false, parentPhone: '+91 98765 43219', avatar: 'https://i.pravatar.cc/150?u=10' },
 ];
 
 const App: React.FC = () => {
@@ -62,11 +62,32 @@ const App: React.FC = () => {
         return {
           ...s,
           boarded: isBoarding,
-          boardedTime: isBoarding ? new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : undefined
+          boardedTime: isBoarding ? new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : undefined,
+          dropped: false, // Reset dropped status when toggling boarding
+          droppedTime: undefined
         };
       }
       return s;
     }));
+  };
+
+  const handleDrop = (id: string) => {
+    const student = students.find(s => s.id === id);
+    if (student) {
+      // Simulate sending notification
+      console.log(`Notification sent to Institution:\n\nStudent: ${student.name}\nRoll Number: ${student.rollNumber}\nClass: ${student.grade}\nBus Number: ${trip.busNumber}\n\nStatus: DROPPED`);
+
+      setStudents(prev => prev.map(s => {
+        if (s.id === id) {
+          return {
+            ...s,
+            dropped: true,
+            droppedTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          };
+        }
+        return s;
+      }));
+    }
   };
 
   const boardedCount = students.filter(s => s.boarded).length;
@@ -92,6 +113,8 @@ const App: React.FC = () => {
           <StudentBoarding
             students={students}
             onToggleBoarding={toggleBoarding}
+            onDrop={handleDrop}
+            busNumber={trip.busNumber}
             setView={setCurrentView}
           />
         );
@@ -128,10 +151,7 @@ const App: React.FC = () => {
         </div>
       )}
       <div className="flex-1 relative flex flex-col h-full overflow-hidden">
-        <div className="bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] py-1 px-4 flex items-center justify-center gap-2 border-b border-amber-200/50 dark:border-amber-800/30 shrink-0">
-          <span className="material-symbols-outlined text-xs">science</span>
-          Mock Data Mode Enabled
-        </div>
+
         <div className="flex-1 overflow-hidden">
           {renderView()}
         </div>
