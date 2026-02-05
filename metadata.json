@@ -1,0 +1,7 @@
+{
+  "name": "Copy of Vidyon Driver",
+  "description": "A comprehensive school bus driver management application featuring real-time trip tracking, student boarding management, and route status monitoring.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
